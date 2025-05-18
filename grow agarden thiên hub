@@ -1,0 +1,37 @@
+--[[ 
+Grow a Garden - Auto Farm Script
+Phiên bản: đơn giản, không GUI, không cần key, bật là chạy
+Tính năng: Tự động nhặt trái cây từ cây trong nông trại của bạn
+Chống ban cơ bản: delay + kiểm tra farm ID
+]]
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Workspace = game:GetService("Workspace")
+local farmLoaded = false
+
+-- Đảm bảo player đã load xong
+repeat wait() until LocalPlayer.Character and LocalPlayer:FindFirstChild("PlayerGui")
+
+-- Delay để tránh bị phát hiện spam
+local delayBetweenActions = 0.3
+
+-- Auto Farm Trái
+local function autoFarm()
+    while true do
+        local myFarm = Workspace:FindFirstChild(LocalPlayer.Name .. "'s Farm")
+        if myFarm then
+            for _, obj in pairs(myFarm:GetDescendants()) do
+                if obj:IsA("TouchTransmitter") and obj.Parent and obj.Parent:IsA("BasePart") then
+                    firetouchinterest(LocalPlayer.Character.HumanoidRootPart, obj.Parent, 0)
+                    wait(0.1)
+                    firetouchinterest(LocalPlayer.Character.HumanoidRootPart, obj.Parent, 1)
+                    wait(delayBetweenActions)
+                end
+            end
+        end
+        wait(1) -- đợi 1 giây rồi lặp lại
+    end
+end
+
+-- Bắt đầu
